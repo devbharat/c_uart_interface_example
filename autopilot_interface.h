@@ -167,6 +167,42 @@ struct Time_Stamps
 };
 
 
+struct msg_actions
+{
+	msg_actions()
+	{
+		reset_actions();
+	}
+
+	bool heartbeat;
+	bool sys_status;
+	bool battery_status;
+	bool radio_status;
+	bool local_position_ned;
+	bool global_position_int;
+	bool position_target_local_ned;
+	bool position_target_global_int;
+	bool highres_imu;
+	bool attitude;
+
+	void
+	reset_actions()
+	{
+		heartbeat = 0;
+		sys_status = 0;
+		battery_status = 0;
+		radio_status = 0;
+		local_position_ned = 0;
+		global_position_int = 0;
+		position_target_local_ned = 0;
+		position_target_global_int = 0;
+		highres_imu = 0;
+		attitude = 0;
+	}
+
+};
+
+
 // Struct containing information on the MAV we are currently connected to
 
 struct Mavlink_Messages {
@@ -210,10 +246,19 @@ struct Mavlink_Messages {
 	// Time Stamps
 	Time_Stamps time_stamps;
 
+	// Action flags
+	msg_actions msg_actions_pending;
+
 	void
 	reset_timestamps()
 	{
 		time_stamps.reset_timestamps();
+	}
+
+	void
+	reset_actions()
+	{
+		msg_actions_pending.reset_actions();
 	}
 
 };
