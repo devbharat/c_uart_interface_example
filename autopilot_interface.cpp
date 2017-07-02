@@ -362,6 +362,16 @@ read_messages()
 					break;
 				}
 
+				case MAVLINK_MSG_ID_CAMERA_TRIGGER:
+				{
+					//printf("MAVLINK_MSG_ID_ATTITUDE\n");
+					mavlink_msg_camera_trigger_decode(&message, &(current_messages.camera_trigger));
+					current_messages.time_stamps.camera_trigger = get_time_usec();
+					this_timestamps.camera_trigger = current_messages.time_stamps.camera_trigger;
+					current_messages.msg_actions_pending.camera_trigger = true;
+					break;
+				}
+
 				default:
 				{
 					// printf("Warning, did not handle message id %i\n",message.msgid);
@@ -384,6 +394,7 @@ read_messages()
 //				this_timestamps.position_target_global_int &&
 //				this_timestamps.highres_imu                &&
 //				this_timestamps.attitude                   &&
+				this_timestamps.camera_trigger             &&
 				this_timestamps.sys_status
 				;
 
