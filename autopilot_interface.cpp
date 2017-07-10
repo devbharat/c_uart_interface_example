@@ -268,6 +268,7 @@ read_messages()
 					mavlink_msg_heartbeat_decode(&message, &(current_messages.heartbeat));
 					current_messages.time_stamps.heartbeat = get_time_usec();
 					this_timestamps.heartbeat = current_messages.time_stamps.heartbeat;
+					current_messages.msg_actions_pending.heartbeat = true;
 					break;
 				}
 
@@ -277,6 +278,7 @@ read_messages()
 					mavlink_msg_sys_status_decode(&message, &(current_messages.sys_status));
 					current_messages.time_stamps.sys_status = get_time_usec();
 					this_timestamps.sys_status = current_messages.time_stamps.sys_status;
+					current_messages.msg_actions_pending.sys_status = true;
 					break;
 				}
 
@@ -286,6 +288,7 @@ read_messages()
 					mavlink_msg_battery_status_decode(&message, &(current_messages.battery_status));
 					current_messages.time_stamps.battery_status = get_time_usec();
 					this_timestamps.battery_status = current_messages.time_stamps.battery_status;
+					current_messages.msg_actions_pending.battery_status = true;
 					break;
 				}
 
@@ -295,6 +298,7 @@ read_messages()
 					mavlink_msg_radio_status_decode(&message, &(current_messages.radio_status));
 					current_messages.time_stamps.radio_status = get_time_usec();
 					this_timestamps.radio_status = current_messages.time_stamps.radio_status;
+					current_messages.msg_actions_pending.radio_status = true;
 					break;
 				}
 
@@ -304,6 +308,7 @@ read_messages()
 					mavlink_msg_local_position_ned_decode(&message, &(current_messages.local_position_ned));
 					current_messages.time_stamps.local_position_ned = get_time_usec();
 					this_timestamps.local_position_ned = current_messages.time_stamps.local_position_ned;
+					current_messages.msg_actions_pending.local_position_ned = true;
 					break;
 				}
 
@@ -313,6 +318,7 @@ read_messages()
 					mavlink_msg_global_position_int_decode(&message, &(current_messages.global_position_int));
 					current_messages.time_stamps.global_position_int = get_time_usec();
 					this_timestamps.global_position_int = current_messages.time_stamps.global_position_int;
+					current_messages.msg_actions_pending.global_position_int = true;
 					break;
 				}
 
@@ -322,6 +328,7 @@ read_messages()
 					mavlink_msg_position_target_local_ned_decode(&message, &(current_messages.position_target_local_ned));
 					current_messages.time_stamps.position_target_local_ned = get_time_usec();
 					this_timestamps.position_target_local_ned = current_messages.time_stamps.position_target_local_ned;
+					current_messages.msg_actions_pending.position_target_local_ned = true;
 					break;
 				}
 
@@ -331,6 +338,7 @@ read_messages()
 					mavlink_msg_position_target_global_int_decode(&message, &(current_messages.position_target_global_int));
 					current_messages.time_stamps.position_target_global_int = get_time_usec();
 					this_timestamps.position_target_global_int = current_messages.time_stamps.position_target_global_int;
+					current_messages.msg_actions_pending.position_target_global_int = true;
 					break;
 				}
 
@@ -340,6 +348,7 @@ read_messages()
 					mavlink_msg_highres_imu_decode(&message, &(current_messages.highres_imu));
 					current_messages.time_stamps.highres_imu = get_time_usec();
 					this_timestamps.highres_imu = current_messages.time_stamps.highres_imu;
+					current_messages.msg_actions_pending.highres_imu = true;
 					break;
 				}
 
@@ -349,6 +358,17 @@ read_messages()
 					mavlink_msg_attitude_decode(&message, &(current_messages.attitude));
 					current_messages.time_stamps.attitude = get_time_usec();
 					this_timestamps.attitude = current_messages.time_stamps.attitude;
+					current_messages.msg_actions_pending.attitude = true;
+					break;
+				}
+
+				case MAVLINK_MSG_ID_CAMERA_TRIGGER:
+				{
+					//printf("MAVLINK_MSG_ID_ATTITUDE\n");
+					mavlink_msg_camera_trigger_decode(&message, &(current_messages.camera_trigger));
+					current_messages.time_stamps.camera_trigger = get_time_usec();
+					this_timestamps.camera_trigger = current_messages.time_stamps.camera_trigger;
+					current_messages.msg_actions_pending.camera_trigger = true;
 					break;
 				}
 
@@ -374,6 +394,7 @@ read_messages()
 //				this_timestamps.position_target_global_int &&
 //				this_timestamps.highres_imu                &&
 //				this_timestamps.attitude                   &&
+				this_timestamps.camera_trigger             &&
 				this_timestamps.sys_status
 				;
 
@@ -630,13 +651,13 @@ start()
 	// --------------------------------------------------------------------------
 
 	// Wait for initial position ned
-	while ( not ( current_messages.time_stamps.local_position_ned &&
-				  current_messages.time_stamps.attitude            )  )
-	{
-		if ( time_to_exit )
-			return;
-		usleep(500000);
-	}
+	//while ( not ( current_messages.time_stamps.local_position_ned &&
+	//			  current_messages.time_stamps.attitude            )  )
+	//{
+	//	if ( time_to_exit )
+	//		return;
+	//	usleep(500000);
+	//}
 
 	// copy initial position ned
 	Mavlink_Messages local_data = current_messages;

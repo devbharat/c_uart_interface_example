@@ -148,6 +148,7 @@ struct Time_Stamps
 	uint64_t position_target_global_int;
 	uint64_t highres_imu;
 	uint64_t attitude;
+	uint64_t camera_trigger;
 
 	void
 	reset_timestamps()
@@ -162,6 +163,45 @@ struct Time_Stamps
 		position_target_global_int = 0;
 		highres_imu = 0;
 		attitude = 0;
+		camera_trigger = 0;
+	}
+
+};
+
+
+struct msg_actions
+{
+	msg_actions()
+	{
+		reset_actions();
+	}
+
+	bool heartbeat;
+	bool sys_status;
+	bool battery_status;
+	bool radio_status;
+	bool local_position_ned;
+	bool global_position_int;
+	bool position_target_local_ned;
+	bool position_target_global_int;
+	bool highres_imu;
+	bool attitude;
+	bool camera_trigger;
+
+	void
+	reset_actions()
+	{
+		heartbeat = 0;
+		sys_status = 0;
+		battery_status = 0;
+		radio_status = 0;
+		local_position_ned = 0;
+		global_position_int = 0;
+		position_target_local_ned = 0;
+		position_target_global_int = 0;
+		highres_imu = 0;
+		attitude = 0;
+		camera_trigger = 0;
 	}
 
 };
@@ -204,16 +244,28 @@ struct Mavlink_Messages {
 	// Attitude
 	mavlink_attitude_t attitude;
 
+	// Camera Trigger
+	mavlink_camera_trigger_t camera_trigger;
+
 	// System Parameters?
 
 
 	// Time Stamps
 	Time_Stamps time_stamps;
 
+	// Action flags
+	msg_actions msg_actions_pending;
+
 	void
 	reset_timestamps()
 	{
 		time_stamps.reset_timestamps();
+	}
+
+	void
+	reset_actions()
+	{
+		msg_actions_pending.reset_actions();
 	}
 
 };
